@@ -9,12 +9,6 @@ const save = (fileName, data, message) => fs.writeFile(fileName, data, (err) => 
         console.log(message)
 })
 
-// Generic Read Util
-const read = (fileName) => {
-    readBuffer = fs.readFileSync(fileName)
-    return readBuffer.toString()
-}
-
 // Write Note to notes.json
 const saveNote = (title, body) => {
     const notes = loadNotes()
@@ -29,6 +23,7 @@ const saveNote = (title, body) => {
         console.log(chalk.red("Note already exists "))
 }
 
+// Remove a note from notes.json
 const removeNote = (title) => {
     const notes = loadNotes()
     const selectedNote = notes.findIndex(note => note.title === title)
@@ -41,7 +36,7 @@ const removeNote = (title) => {
 }
 
 // Read Notes from notes.json
-const loadNotes = function () {
+const loadNotes = () => {
     try {
         const dataBuffer = fs.readFileSync('notes.json')
         return JSON.parse(dataBuffer.toString())
@@ -50,8 +45,26 @@ const loadNotes = function () {
     }
 }
 
+
+const list = () => {
+    const notes = loadNotes()
+    return notes.map(note=>note.title)
+}
+
+const read = (title) => {
+    const notes = loadNotes()
+    const selectedNote = notes.findIndex(note => note.title === title)
+    if (selectedNote >= 0) {
+        return notes[selectedNote].body
+    } else {
+        console.log(chalk.red("Note could not be found"))
+    }
+}
+
 module.exports = {
     getNote: read,
     addNote: saveNote,
-    removeNote: removeNote
+    removeNote: removeNote,
+    listNotes: list,
+    readNote: read
 }
