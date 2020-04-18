@@ -12,8 +12,8 @@ const save = (fileName, data, message) => fs.writeFile(fileName, data, (err) => 
 // Write Note to notes.json
 const saveNote = (title, body) => {
     const notes = loadNotes()
-    const dups = notes.filter((note) => note.title === title)
-    if (!dups.length) {
+    const dup = notes.find((note) => note.title === title)
+    if (!dup) {
         notes.push({
             title: title,
             body: body
@@ -48,6 +48,7 @@ const loadNotes = () => {
 
 const list = () => {
     const notes = loadNotes()
+    debugger
     return notes.map(note=>note.title)
 }
 
